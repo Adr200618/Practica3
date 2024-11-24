@@ -52,3 +52,50 @@ void distanciasDesdePunto(pair<double, double> puntoSeleccionado, vector<pair<do
     }
 }
 
+int main() {
+    vector<pair<double, double>> puntos;
+    double x_min, x_max, y_min, y_max;
+
+    cout << "Ingrese los límites del cuadrante (x_min, x_max, y_min, y_max): ";
+    cin >> x_min >> x_max >> y_min >> y_max;
+
+    while (true) {
+        cout << "Ingrese las coordenadas x, y (o 'q' para salir): ";
+        string entrada;
+        cin >> entrada;
+        if (entrada == "q") break;
+
+        double x = stod(entrada);
+        double y;
+        cin >> entrada;
+        y = stod(entrada);
+        
+        puntos.push_back(make_pair(x, y));
+        
+        string cuadrante = determinarCuadrante(x, y);
+        cout << "La coordenada (" << x << ", " << y << ") se encuentra en: " << cuadrante << endl;
+    }
+
+    for (size_t i = 0; i < puntos.size(); ++i) {
+        for (size_t j = i + 1; j < puntos.size(); ++j) {
+                        for (size_t k = j + 1; k < puntos.size(); ++k) {
+                if (sonColineales(puntos[i], puntos[j], puntos[k])) {
+                    cout << "Los puntos (" << puntos[i].first << ", " << puntos[i].second << "), "
+                         << "(" << puntos[j].first << ", " << puntos[j].second << "), "
+                         << "(" << puntos[k].first << ", " << puntos[k].second << ") están en la misma línea." << endl;
+                    imprimirEcuacionLinea(puntos[i], puntos[j]);
+                }
+            }
+        }
+    }
+
+    double max_distancia = distanciaMaxima(puntos, x_min, x_max, y_min, y_max);
+    cout << "La distancia máxima encontrada entre dos puntos dentro de los límites es: " << max_distancia << endl;
+
+    if (!puntos.empty()) {
+        pair<double, double> punto_seleccionado = puntos[0];
+        distanciasDesdePunto(punto_seleccionado, puntos);
+    }
+
+    return 0;
+}
